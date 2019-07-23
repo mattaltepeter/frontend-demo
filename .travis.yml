@@ -1,0 +1,10 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t mattaltepeter/frontend-demo -f Dockerfile.dev .
+  # docker run -e CI=true USERNAME/docker-react npm run test
+
+script:
+  - docker run mattaltepeter/frontend-demo npm run test -- --coverage
