@@ -4,7 +4,19 @@ services:
 
 before_install:
   - docker build -t mattaltepeter/frontend-demo -f Dockerfile.dev .
-  # docker run -e CI=true USERNAME/docker-react npm run test
 
 script:
-  - docker run mattaltepeter/frontend-demo npm run test -- --coverage
+  - docker run -e CI=true mattaltepeter/frontend-demo npm run test -- --coverage
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-2'
+  app: 'frontend-demo'
+  env: 'frontenddemo-env'
+  bucket_name: elasticbeanstalk-us-east-2-137735033005
+  bucket_path: 'frontend-demo'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
